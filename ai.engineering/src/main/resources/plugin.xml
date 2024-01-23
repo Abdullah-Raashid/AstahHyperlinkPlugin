@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+   <extension point="com.change_vision.astah.ui.view">
+   <view
+           id="ai.engineering.internal.Matrixview"
+           type="extraTab"
+           class="ai.engineering.Matrixview" />
+   </extension>
+   <extension point="com.change_vision.astah.ui.actionSets">
+      <actionSet
+            label="%action_set_label"
+            visible="true"
+            id="ai.engineering.ai.engineering.actionSet">
+         <menu
+               id="ai.engineering"
+               label="%menu_group"
+               path="tool/ai.engineering">
+         </menu>
+         <action
+			   label="%menu_label"
+               icon="icons/sample.gif"
+               class="ai.engineering.TemplateAction"
+               tooltip="%menu_tooltip"
+               menubarPath="tool/ai.engineering/"
+               id="ai.engineering">
+         </action>
+     </actionSet>
+   </extension>
+</plugin>
