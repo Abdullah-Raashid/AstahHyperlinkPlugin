@@ -10,6 +10,7 @@ import com.change_vision.jude.api.inf.project.ProjectEventListener;
 import com.change_vision.jude.api.inf.project.ProjectEvent;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
@@ -21,77 +22,68 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
 public class Matrixview extends JPanel implements IPluginExtraTabView, ProjectEventListener {
-    private static JTable summaryTable;
-    private static String[] headerString = {" ","1","2","3","4","5","6","7","8","9","10"};
-    private static String[] rows = {"1","2","3","4","5","6","7","8","9","10"};
+    private JTable summaryTable;
+    private String[] headerString = {" ","1","2","3","4","5","6","7","8","9","10"};
 
     public Matrixview(){
         // making the list of all elements that have hyperlinks
         List<IHyperlinkOwner> hyperlinks = ElementPicker.getAllHyperlinksOwner();
         Object[][] tableData = new Object[11][11];
+        
+        int size = hyperlinks.size();
+
+        size = 20;
+
+        tableData = new Object[size][size];
+        headerString = new String[size+1];
+
         int index = 0;
-        // hyperlinks.toArray(headerString);
+        
         for (int i = 0; i < hyperlinks.size(); i++) {
             List<IEntity> related = ElementPicker.getRelatedEntities(hyperlinks.get(i));
-            List<String>display = new ArrayList<String>();
+
+            // set the header and first column
+            if(!related.isEmpty() & index < size){
+                INamedElement r1 = (INamedElement)hyperlinks.get(i);
+                headerString[index+1] = r1.getName();
+                tableData[index][0] = r1.getName();
+                index = index+1;
+            }
+        }
+
+        int index2 = 0;
+
+        //getting and setting the elements
+        for (int i = 0; i < hyperlinks.size(); i++) {
+            List<IEntity> related = ElementPicker.getRelatedEntities(hyperlinks.get(i));
+            List<String> display = new ArrayList<String>();
+           
             // getting names of related elements
             for (int j = 0; j < related.size(); j++) {
                 INamedElement r2 = (INamedElement)related.get(j);
                 display.add(r2.getName());
             }
-            // set the header and first column
-            if(!display.isEmpty()&& index<10){
-                INamedElement r1 = (INamedElement)hyperlinks.get(i);
-                headerString[index+1] = r1.getName();
-                rows[index] = r1.getName();
-                tableData[index][0] = r1.getName();
-            }
-            // positioning the data
-            if(!display.isEmpty()&& index<10){
+
+            if (!display.isEmpty() && index2 < size-1) {
                 for (int j = 0; j < display.size(); j++) {
-                    String currentItem = display.get(j);
-                    for (int k = 0; k < display.size(); k++) {
-                        if(display.get(j).equals(tableData[k][0])){
-                            tableData[k][index + 1] = "true";
-                        }else{
-                            tableData[k][index + 1] ="false";
-                        }
+                    for (int k = 0; k < tableData.length; k++) {
+                        if (display.get(j).equals(tableData[k][0])) {
+                            System.out.println("Comparing");
+                            tableData[k][index2+1] = display.get(j);
+                        }   
                     }
                 }
-                index = index+1;
+                index2++;
             }
         }
 
-
-        DefaultTableModel tableModel = new DefaultTableModel(tableData, headerString){
-            public Class getColumnClass(int column){
-                switch(column){
-                    case 5: return Icon.class;
-                    default: return super.getColumnClass(column);
-                }
-            }
-        };
+        DefaultTableModel tableModel = new DefaultTableModel(tableData, headerString);
         summaryTable = new JTable(tableModel);
 
-        add(new JScrollPane(summaryTable));
-    }
+        JScrollPane scrollPane = new JScrollPane(summaryTable);
+        scrollPane.setPreferredSize(new Dimension(800, 800));
 
-    public static void updateTable(){
-        if(summaryTable == null){
-            return;
-        }
-
-
-        Object[][] tableData = null;
-        DefaultTableModel tableModel = new DefaultTableModel(tableData, headerString){
-            public Class getColumnClass(int column){
-                switch(column){
-                    case 5: return Icon.class;
-                    default: return super.getColumnClass(column);
-                }
-            }
-        };
-        summaryTable.setModel(tableModel);
+        add(scrollPane);
     }
 
     @Override

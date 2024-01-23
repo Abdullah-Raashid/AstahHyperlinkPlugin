@@ -1,8 +1,6 @@
-ai/engineering/NamedElementPicker.class
-ai/engineering/ElementPicker.class
-ai/engineering/ToolUtilities.class
-ai/engineering/Activator.class
-ai/engineering/TemplateAction.class
-ai/engineering/Matrixview$1.class
-ai/engineering/Matrixview$2.class
-ai/engineering/Matrixview.class
+ai\engineering\NamedElementPicker.class
+ai\engineering\TemplateAction.class
+ai\engineering\ToolUtilities.class
+ai\engineering\ElementPicker.class
+ai\engineering\Activator.class
+ai\engineering\Matrixview.class

@@ -186,7 +186,6 @@ public class ElementPicker {
                     String id = hyperlinks[i].getName();
                     for (INamedElement element : elements) {
                         if(id.equals(element.getId())){
-                            System.out.println("found: " + id);
                             relatedEntities.add(element);
                         }
                     }
